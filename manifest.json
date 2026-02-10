@@ -1,0 +1,20 @@
+{
+  "name": "L7 Sports Fisioterapia",
+  "short_name": "L7 Sports",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#8A2BE2",
+  "icons": [
+    {
+      "src": "assets/icon-app.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-app.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

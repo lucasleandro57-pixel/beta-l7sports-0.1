@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Treino - L7 Sports</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header com Logo -->
+        <header class="header">
+            <div class="logo-container">
+                <img src="assets/logo-site.png" alt="L7 Sports Fisioterapia Logo" class="main-logo">
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    Início
+                </a>
+                </a>
+                <a href="evolucao.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    Evolução
+                </a>
+                <a href="biblioteca.html" class="nav-link">
+                    <i class="fas fa-dumbbell"></i>
+                    Biblioteca
+                </a>
+            </nav>
+        </header>
+
+        <!-- Container Principal -->
+        <div class="main-container">
+            <!-- Estado de Carregamento -->
+            <div class="loading-state" id="loading-state">
+                <i class="fas fa-spinner fa-spin"></i>
+                <h3>Carregando ficha de treino...</h3>
+            </div>
+
+            <!-- Estado de Erro -->
+            <div class="error-state" id="error-state" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Paciente não encontrado</h3>
+                <p>O paciente selecionado não foi encontrado ou foi removido.</p>
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar à Lista
+                </a>
+            </div>
+
+            <!-- Conteúdo da Ficha -->
+            <div class="workout-content" id="workout-content" style="display: none;">
+                <!-- Cabeçalho do Paciente -->
+                <div class="patient-header">
+                    <div class="patient-info">
+                        <h1 id="patient-name">
+                            <i class="fas fa-user"></i>
+                            <span>Nome do Paciente</span>
+                        </h1>
+                        <div class="patient-location" id="patient-location">
+                            <!-- Local da lesão será inserido aqui -->
+                        </div>
+                        <div class="patient-focus" id="patient-focus">
+                            <!-- Tags de foco serão inseridas aqui -->
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="editPatient()">
+                            <i class="fas fa-edit"></i>
+                            Editar Paciente
+                        </button>
+                        <button class="btn btn-secondary" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filtros de Exercícios -->
+                <div class="filters-section">
+                    <h2><i class="fas fa-filter"></i> Filtrar Exercícios</h2>
+                    <div class="filter-buttons" id="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">
+                            <i class="fas fa-th"></i>
+                            Todos
+                        </button>
+                        <!-- Botões de filtro serão inseridos dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- Exercícios Recomendados -->
+                <div class="exercises-section">
+                    <h2><i class="fas fa-dumbbell"></i> Exercícios Recomendados</h2>
+                    
+                    <!-- Estado Vazio -->
+                    <div class="empty-exercises" id="empty-exercises" style="display: none;">
+                        <i class="fas fa-search"></i>
+                        <h3>Nenhum exercício encontrado</h3>
+                        <p>Não há exercícios disponíveis para os filtros selecionados.</p>
+                    </div>
+
+                    <!-- Grid de Exercícios -->
+                    <div class="exercise-grid" id="exercise-grid">
+                        <!-- Cards de exercícios serão inseridos aqui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 L7 Sports Fisioterapia - Sistema de Prescrição de Treino</p>
+        </footer>
+    </div>
+
+    <script src="exercises-data.js"></script>
+
+    <!-- Firebase (CDN) + Sync (não altera layout/fluxos existentes) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="firebase-sync.js"></script>
+    <script src="auth-ui.js"></script>
+
+    <script src="ficha.js"></script>
+</body>
+</html>

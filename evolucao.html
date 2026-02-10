@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L7 Sports - Evolução</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/icon-app.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* --- ESTILOS DOS CARDS (IDÊNTICO AO INDEX) --- */
+        .patients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .patient-card {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .patient-card:hover {
+            transform: translateY(-5px);
+            background: rgba(139, 92, 246, 0.1);
+            border-color: #8B5CF6;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .card-header { display: flex; align-items: center; gap: 1rem; }
+        .card-avatar { width: 45px; height: 45px; background: transparent; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .card-info h3 { margin: 0; font-size: 1.1rem; color: #fff; font-weight: 600; }
+        .card-info p { margin: 0; font-size: 0.85rem; color: #ccc; }
+        
+        .lesion-container { border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.8rem; margin-bottom: 0.5rem; }
+        .lesion-badge { padding: 0.4rem 1rem; background: #6D28D9; border: 1px solid #8B5CF6; border-radius: 8px; font-size: 0.8rem; color: white; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; text-transform: uppercase; }
+        
+        .focos-container { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .tag-box { padding: 0.3rem 0.8rem; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 50px; font-size: 0.75rem; color: #E9D5FF; font-weight: 500; }
+        
+        .card-action { margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); color: #8B5CF6; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+
+        /* --- ESTILOS DO DASHBOARD (GRÁFICOS) --- */
+        .dashboard-container { display: none; padding: 2rem; }
+        
+        /* CABEÇALHO RESPONSIVO */
+        .dashboard-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 2rem; 
+            background: rgba(255,255,255,0.05); 
+            padding: 1.5rem; 
+            border-radius: 16px; 
+            border: 1px solid rgba(255,255,255,0.1);
+            flex-wrap: wrap; 
+            gap: 1rem;
+        }
+
+        .patient-profile { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+        
+        .profile-avatar-dash { 
+            width: 80px; height: 80px; 
+            background: rgba(139, 92, 246, 0.2); 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 2rem; color: #A78BFA; 
+            border: 2px solid #8B5CF6; 
+            flex-shrink: 0; 
+        }
+        
+        .profile-info h2 { margin: 0; font-size: 1.8rem; color: white; }
+        .profile-badges { display: flex; gap: 0.8rem; margin-top: 0.5rem; flex-wrap: wrap; }
+        
+        /* GRID DE GRÁFICOS */
+        .dashboard-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 1.5rem; 
+        }
+
+        .chart-card { 
+            background: rgba(30, 30, 40, 0.95); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 16px; 
+            padding: 1.5rem; 
+            min-height: 350px; 
+            display: flex; 
+            flex-direction: column; 
+            position: relative; 
+        }
+        
+        .chart-wrapper { flex: 1; position: relative; width: 100%; min-height: 250px; }
+        .chart-full-width { grid-column: 1 / -1; }
+        
+        .btn-add-data { background: #8B5CF6; color: white; padding: 0.8rem 1.5rem; border-radius: 12px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; border: none; cursor: pointer; font-size: 1rem; }
+        .btn-add-data:hover { background: #7C3AED; transform: translateY(-2px); }
+        
+        .btn-back { background: transparent; color: #ccc; border: 1px solid rgba(255,255,255,0.2); padding: 0.8rem 1.5rem; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.2s; font-size: 1rem; }
+        .btn-back:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.05); }
+
+        /* === MODO CELULAR (Mobile Only) === */
+        @media (max-width: 768px) {
+            .dashboard-container { padding: 1rem; }
+            .dashboard-grid { grid-template-columns: 1fr !important; }
+            .dashboard-header { flex-direction: column; text-align: center; gap: 1.5rem; }
+            .patient-profile { flex-direction: column; justify-content: center; width: 100%; }
+            .header-actions { width: 100%; }
+            .btn-add-data { width: 100%; justify-content: center; }
+            .btn-back { width: 100%; justify-content: center; margin-bottom: 1rem; }
+            .profile-badges { justify-content: center; }
+        }
+    
+        .improvements-box{
+            background: rgba(167,139,250,0.08);
+            border: 1px solid rgba(167,139,250,0.25);
+            border-radius: 14px;
+            padding: 0.75rem 1rem;
+        }
+        .improvements-title{
+            color:#A78BFA;
+            font-weight:700;
+            font-size:0.95rem;
+            margin:0 0 0.35rem 0;
+            display:flex;
+            align-items:center;
+            gap:0.5rem;
+        }
+        .improvements-list{
+            margin:0;
+            padding-left:1.1rem;
+            color:#cbd5e1;
+            opacity:0.95;
+            font-size:0.92rem;
+            line-height:1.35;
+        }
+        .improvements-list li{ margin: 0.18rem 0; }
+        .improvements-pill{
+            display:inline-flex;
+            align-items:center;
+            gap:0.35rem;
+            padding:0.15rem 0.55rem;
+            border-radius:999px;
+            background: rgba(124,58,237,0.18);
+            border:1px solid rgba(124,58,237,0.32);
+            color:#E9D5FF;
+            font-size:0.78rem;
+            font-weight:700;
+            margin-right:0.35rem;
+            white-space:nowrap;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo-container">
+                <img src="assets/logo-site.png" alt="L7 Logo" class="main-logo">
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Início</a>
+                <a href="evolucao.html" class="nav-link active"><i class="fas fa-chart-line"></i> Evolução</a>
+                <a href="biblioteca.html" class="nav-link"><i class="fas fa-dumbbell"></i> Biblioteca</a>
+            </nav>
+        </header>
+
+        <div class="main-container">
+            <div id="patient-list-view">
+                <div class="page-header">
+                    <h1><i class="fas fa-users"></i> Evolução dos Atletas</h1>
+                    <p>Selecione um paciente para visualizar gráficos detalhados</p>
+                </div>
+                
+                <div class="search-container" style="margin-bottom: 2rem;">
+                    <div class="search-wrapper" style="position: relative;">
+                        <i class="fas fa-search search-icon" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #888;"></i>
+                        <input type="text" id="search-patient" name="patient_search" class="search-input" placeholder="Buscar paciente..." onkeyup="filtrarPacientes()" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="search" data-lpignore="true" style="width: 100%; padding: 1rem 1rem 1rem 3rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; font-size: 1rem;">
+                    </div>
+                </div>
+
+                <div id="patients-grid" class="patients-grid"></div>
+                
+                <div id="no-patients-msg" style="text-align: center; padding: 4rem; display: none;">
+                    <i class="fas fa-user-plus" style="font-size: 3rem; color: #444; margin-bottom: 1rem;"></i>
+                    <p style="color: #666;">Nenhum paciente encontrado.</p>
+                </div>
+            </div>
+
+            <div id="dashboard-view" class="dashboard-container">
+                <div class="dashboard-header">
+                    <div class="patient-profile">
+                        <button class="btn-back" onclick="voltarParaLista()">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                        <div class="profile-avatar-dash"><i class="fas fa-user"></i></div>
+                        <div class="profile-info">
+                            <h2 id="dash-patient-name">Nome do Paciente</h2>
+                            <div class="profile-badges">
+                                <div id="dash-lesion-area"></div>
+                                <div id="dash-tags-container" style="display: flex; gap: 0.5rem;"></div>
+                            </div>
+                            <div id="dash-improvements" class="improvements-box" style="margin-top: 0.75rem; display:none;"></div>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-add-data" onclick="irParaAdicionarDados()">
+                            <i class="fas fa-plus-circle"></i> Adicionar Dados
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="chart-card" id="card-1"><h3 id="titulo-grafico-1" style="margin-bottom: 1rem; color: #A78BFA; font-size: 1.1rem;">Gráfico 1</h3><div class="chart-wrapper"><canvas id="chart1"></canvas></div></div>
+                    <div class="chart-card" id="card-2"><h3 id="titulo-grafico-2" style="margin-bottom: 1rem; color: #A78BFA; font-size: 1.1rem;">Gráfico 2</h3><div class="chart-wrapper"><canvas id="chart2"></canvas></div></div>
+                    <div class="chart-card" id="card-3"><h3 id="titulo-grafico-3" style="margin-bottom: 1rem; color: #A78BFA; font-size: 1.1rem;">Gráfico 3</h3><div class="chart-wrapper"><canvas id="chart3"></canvas></div></div>
+                    <div class="chart-card" id="card-4"><h3 id="titulo-grafico-4" style="margin-bottom: 1rem; color: #A78BFA; font-size: 1.1rem;">Gráfico 4</h3><div class="chart-wrapper"><canvas id="chart4"></canvas></div></div>
+                    <div class="chart-card chart-full-width" id="card-5"><h3 id="titulo-grafico-5" style="margin-bottom: 1rem; color: #A78BFA; font-size: 1.1rem;">Gráfico 5</h3><div class="chart-wrapper"><canvas id="chart5"></canvas></div></div>
+                    
+                    <div class="chart-card chart-full-width" id="card-6"><h3 id="titulo-grafico-6" style="margin-bottom: 1rem; color: #A78BFA; font-size: 1.1rem;">Gráfico 6</h3><div class="chart-wrapper"><canvas id="chart6"></canvas></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase (CDN) + Sync (não altera layout/fluxos existentes) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="firebase-sync.js"></script>
+    <script src="auth-ui.js"></script>
+
+    <script src="evolucao.js"></script>
+</body>
+</html>

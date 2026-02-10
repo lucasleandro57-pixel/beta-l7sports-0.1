@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L7 Sports - Avaliação</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/icon-app.png">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo-container">
+                <img src="assets/logo-site.png" alt="L7 Logo" class="main-logo">
+            </div>
+            <nav class="nav-menu">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Início</a>
+                <a href="evolucao.html" class="nav-link"><i class="fas fa-chart-line"></i> Evolução</a>
+                <a href="biblioteca.html" class="nav-link"><i class="fas fa-dumbbell"></i> Biblioteca</a>
+            </nav>
+        </header>
+
+        <div class="main-container">
+            <div class="page-header">
+                <h1><i class="fas fa-file-medical-alt"></i> Avaliação</h1>
+                <p>Preencha os dados abaixo para registrar uma avaliação</p>
+            </div>
+
+            <div class="form-container">
+                
+                <div class="form-group" style="display: none;">
+                    <select id="select_paciente_existente">
+                        <option value="novo">Novo Paciente (Cadastrar)</option>
+                    </select>
+                </div>
+
+                <div class="tabs-container" style="margin-bottom: 1.5rem; display: flex; justify-content: center; gap: 1rem;">
+                    <button type="button" class="tab-btn active" onclick="switchSection('mmii')">
+                        <i class="fas fa-running"></i> MMII (Inferior)
+                    </button>
+                    <button type="button" class="tab-btn" onclick="switchSection('mmss')">
+                        <i class="fas fa-hand-paper"></i> MMSS (Superior)
+                    </button>
+                </div>
+
+                <form id="cadastroUnificado" class="patient-form">
+                    
+                    <div id="section-mmii" class="form-section active-section">
+                        
+                        <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                            <h3><i class="fas fa-user"></i> Dados do Paciente</h3>
+                            <div class="form-group">
+                                <label>Nome Completo *</label>
+                                <input type="text" id="nome_mmii" class="nome-input" required placeholder="Ex: Lucas">
+                            </div>
+                            <div class="form-group">
+                                <label>Data da Avaliação</label>
+                                <input type="date" id="data_mmii" class="data-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Local da Lesão *</label>
+                                <select id="lesao_mmii" class="lesao-input" required style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid #8B5CF6; border-radius: 8px; color: white;">
+                                    <option value="Joelho" selected>Joelho</option>
+                                    <option value="Tornozelo">Tornozelo</option>
+                                    <option value="Quadril">Quadril</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <label style="color: #fff;"><i class="fas fa-heartbeat" style="color: #fff;"></i> Nível de Dor (EVA 0-10)</label>
+                                <select id="evaMmii" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid #8B5CF6; border-radius: 8px; color: white;">
+                                    <option value="0" selected>0 - Sem Dor</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5 - Dor Moderada</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10 - Dor Máxima</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h3><i class="fas fa-ruler-combined"></i> Testes MMII</h3>
+                        
+                        <h4 style="color:#ccc; margin-top:1rem;">Hop Test (cm)</h4>
+                        <div class="form-group-row" style="display: flex; gap: 1rem;">
+                            <div class="form-group" style="flex: 1;"><label>E</label><input type="number" id="hopE" placeholder="0"></div>
+                            <div class="form-group" style="flex: 1;"><label>D</label><input type="number" id="hopD" placeholder="0"></div>
+                        </div>
+
+                        <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                            <h4 style="color: #A78BFA; margin-bottom: 1rem;">Y-Test (Lower Quarter)</h4>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                <div>
+                                    <label>Comprimento Perna Esq. (CR)</label>
+                                    <input type="number" id="crMmiiE" step="0.1" placeholder="cm">
+                                </div>
+                                <div>
+                                    <label>Comprimento Perna Dir. (CR)</label>
+                                    <input type="number" id="crMmiiD" step="0.1" placeholder="cm">
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div>
+                                    <label style="color: #ccc; font-size: 0.9rem;">Esquerda (cm)</label>
+                                    <input type="number" id="yAntE" placeholder="Anterior" style="margin-bottom: 0.5rem;">
+                                    <input type="number" id="yPmE" placeholder="Póstero-Medial" style="margin-bottom: 0.5rem;">
+                                    <input type="number" id="yPlE" placeholder="Póstero-Lateral">
+                                </div>
+                                <div>
+                                    <label style="color: #ccc; font-size: 0.9rem;">Direita (cm)</label>
+                                    <input type="number" id="yAntD" placeholder="Anterior" style="margin-bottom: 0.5rem;">
+                                    <input type="number" id="yPmD" placeholder="Póstero-Medial" style="margin-bottom: 0.5rem;">
+                                    <input type="number" id="yPlD" placeholder="Póstero-Lateral">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group-row" style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <div class="form-group" style="flex: 1;">
+                                <label>Lunge Test (Graus)</label>
+                                <input type="number" id="lungeE" placeholder="Esq">
+                                <input type="number" id="lungeD" placeholder="Dir" style="margin-top:5px;">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label>Rotadores (Graus)</label>
+                                <input type="number" id="rotE" placeholder="Esq">
+                                <input type="number" id="rotD" placeholder="Dir" style="margin-top:5px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group-row" style="display: flex; gap: 1rem; margin-top: 1rem; display: none;"> 
+                            <input type="hidden" id="gonioExtMmii" value="0">
+                            <input type="hidden" id="gonioFlexMmii" value="0">
+                            <input type="hidden" id="forcaMmii" value="0">
+                        </div>
+
+                        <h4 style="color:#ccc; margin-top:1rem;">Potência (cm)</h4>
+                        <div class="form-group-row" style="display: flex; gap: 1rem;">
+                            <div class="form-group" style="flex: 1;"><label>CMJ</label><input type="number" id="cmj" placeholder="0"></div>
+                            <div class="form-group" style="flex: 1;"><label>SJ</label><input type="number" id="sj" placeholder="0"></div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary btn-large" onclick="salvarAvaliacao()">
+                                <i class="fas fa-save"></i> Salvar Avaliação MMII
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="section-mmss" class="form-section" style="display: none;">
+                        
+                        <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                            <h3><i class="fas fa-user"></i> Dados do Paciente</h3>
+                            <div class="form-group">
+                                <label>Nome Completo *</label>
+                                <input type="text" id="nome_mmss" class="nome-input" placeholder="Ex: Lucas">
+                            </div>
+                            <div class="form-group">
+                                <label>Data da Avaliação</label>
+                                <input type="date" id="data_mmss" class="data-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Local da Lesão *</label>
+                                <select id="lesao_mmss" class="lesao-input" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid #8B5CF6; border-radius: 8px; color: white;">
+                                    <option value="Ombro" selected>Ombro</option>
+                                    <option value="Cotovelo">Cotovelo</option>
+                                    <option value="Punho">Punho</option>
+                                    <option value="Coluna">Coluna</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 1rem;">
+                                <label style="color: #fff;"><i class="fas fa-heartbeat" style="color: #fff;"></i> Nível de Dor (EVA 0-10)</label>
+                                <select id="evaMmss" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid #8B5CF6; border-radius: 8px; color: white;">
+                                    <option value="0" selected>0 - Sem Dor</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5 - Dor Moderada</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10 - Dor Máxima</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <h3><i class="fas fa-hand-paper"></i> Testes MMSS</h3>
+
+                        <div class="form-group-row" style="display: flex; gap: 1rem;">
+                            <div class="form-group" style="flex: 1;"><label>Gonio. Flexão</label><input type="number" id="gonioFlexMmss" placeholder="Graus"></div>
+                            <div class="form-group" style="flex: 1;"><label>Gonio. Abdução</label><input type="number" id="gonioAbdMmss" placeholder="Graus"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>MCC (Repetições)</label>
+                            <input type="number" id="mcc" placeholder="0">
+                        </div>
+
+                        <div class="form-group" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                            <h4 style="color: #A78BFA; margin-bottom: 1rem;">Y-Test (Upper Quarter)</h4>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                <div>
+                                    <label>Comp. Braço Esq. (C7-Dedo)</label>
+                                    <input type="number" id="crMmssE" step="0.1" placeholder="cm">
+                                </div>
+                                <div>
+                                    <label>Comp. Braço Dir. (C7-Dedo)</label>
+                                    <input type="number" id="crMmssD" step="0.1" placeholder="cm">
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div>
+                                    <label style="color: #ccc; font-size: 0.9rem;">Esquerda (cm)</label>
+                                    <input type="number" id="yMedialE" placeholder="Medial" style="margin-bottom: 0.5rem;">
+                                    <input type="number" id="yInfLatE" placeholder="Inferolateral" style="margin-bottom: 0.5rem;">
+                                    <input type="number" id="ySupLatE" placeholder="Superolateral">
+                                </div>
+                                <div>
+                                    <label style="color: #ccc; font-size: 0.9rem;">Direita (cm)</label>
+                                    <input type="number" id="yMedialD" placeholder="Medial" style="margin-bottom: 0.5rem;">
+                                    <input type="number" id="yInfLatD" placeholder="Inferolateral" style="margin-bottom: 0.5rem;">
+                                    <input type="number" id="ySupLatD" placeholder="Superolateral">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: none;">
+                            <input type="hidden" id="forcaMmss" value="0">
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary btn-large" onclick="salvarAvaliacao()">
+                                <i class="fas fa-save"></i> Salvar Avaliação MMSS
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchSection(sectionName) {
+            document.getElementById('section-mmii').style.display = 'none';
+            document.getElementById('section-mmss').style.display = 'none';
+            document.getElementById('section-' + sectionName).style.display = 'block';
+            
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            if(sectionName === 'mmii') buttons[0].classList.add('active');
+            else buttons[1].classList.add('active');
+        }
+
+        // Sincroniza nomes
+        document.addEventListener('DOMContentLoaded', () => {
+            const nomeMmii = document.getElementById('nome_mmii');
+            const nomeMmss = document.getElementById('nome_mmss');
+            if(nomeMmii && nomeMmss){
+                nomeMmii.addEventListener('input', function() { nomeMmss.value = this.value; });
+                nomeMmss.addEventListener('input', function() { nomeMmii.value = this.value; });
+            }
+            // Data de hoje
+            const hoje = new Date().toISOString().split('T')[0];
+            if(document.getElementById('data_mmii')) document.getElementById('data_mmii').value = hoje;
+            if(document.getElementById('data_mmss')) document.getElementById('data_mmss').value = hoje;
+        });
+    </script>
+    
+    <!-- Firebase (CDN) + Sync (não altera layout/fluxos existentes) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="firebase-sync.js"></script>
+    <script src="auth-ui.js"></script>
+
+    <script src="avaliacao.js"></script>
+</body>
+</html>
